@@ -73,3 +73,8 @@ compdef _awsuse awsuse
 if [ -f "$ZSH_CUSTOM/aliases.zsh" ]; then
     source "$ZSH_CUSTOM/aliases.zsh"
 fi
+
+# Source Nix initialization script
+if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+  . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+fi
