@@ -2,39 +2,50 @@
 # Export PATH
 export PATH="/opt/homebrew/bin:$HOME/bin:$PATH"
 
-# Homebrew environment setup (make sure brew is in your PATH first)
+# Homebrew environment setup
 # ------------------------------------------------------------------------
-# Recommended by Homebrew. Calls brew shellenv to set PATH and FPATH correctly.
-eval "$(brew shellenv)"
+# Check if brew exists, then use `brew shellenv`.
+if command -v brew &>/dev/null; then
+    eval "$(brew shellenv)"
+fi
 
-# Path to your Oh My Zsh installation
+# Path to Oh My Zsh installation
 export ZSH="$HOME/.oh-my-zsh"
 
 # Select a theme (default: robbyrussell)
 ZSH_THEME="robbyrussell"
 
-# -----------------------
+# ------------------------------------------------------------------------
 # Plugins
-# -----------------------
-# Add plugins you want to use. For now, we only enable the git plugin.
+# ------------------------------------------------------------------------
 plugins=(git kubectl)
 
-# Load Oh My Zsh framework and plugins
-source "$ZSH/oh-my-zsh.sh"
-source "/opt/homebrew/opt/kube-ps1/share/kube-ps1.sh"
-export KUBE_PS1_SYMBOL_USE_IMG=true
-PS1='$(kube_ps1)'$PS1
+# Oh My Zsh framework
+if [ -f "$ZSH/oh-my-zsh.sh" ]; then
+    source "$ZSH/oh-my-zsh.sh"
+fi
 
-# -----------------------
+# kube-ps1 prompt
+if [ -f "/opt/homebrew/opt/kube-ps1/share/kube-ps1.sh" ]; then
+    source "/opt/homebrew/opt/kube-ps1/share/kube-ps1.sh"
+    export KUBE_PS1_SYMBOL_USE_IMG=true
+    PS1='$(kube_ps1)'$PS1
+fi
+
+# ------------------------------------------------------------------------
 # User Configuration
-# -----------------------
+# ------------------------------------------------------------------------
 
-# AWS CLI completion
+# Use zsh's bash completion system
 autoload bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
-complete -C '/opt/homebrew/bin/aws_completer' aws
 
-# AWS Profile switch
+# AWS CLI completion
+if [ -f "/opt/homebrew/bin/aws_completer" ]; then
+    complete -C '/opt/homebrew/bin/aws_completer' aws
+fi
+
+# AWS Profile helper functions
 awslist() {
     echo "Available AWS profiles:"
     aws configure list-profiles
@@ -49,9 +60,8 @@ awsuse() {
     echo "Switched to AWS profile: $AWS_PROFILE"
 }
 
-# ---- AWS profile completion for `awsuse` ----
+# AWS profile completion for awsuse
 _awsuse() {
-    # Capture the list of profiles for autocompletion
     local -a profiles
     profiles=($(aws configure list-profiles 2>/dev/null))
     compadd "${profiles[@]}"
@@ -59,5 +69,7 @@ _awsuse() {
 }
 compdef _awsuse awsuse
 
-# Source custom aliases (make sure aliases.zsh is in the correct location)
-[[ -f "$ZSH_CUSTOM/aliases.zsh" ]] && source "$ZSH_CUSTOM/aliases.zsh"
+# Source custom aliases
+if [ -f "$ZSH_CUSTOM/aliases.zsh" ]; then
+    source "$ZSH_CUSTOM/aliases.zsh"
+fi
