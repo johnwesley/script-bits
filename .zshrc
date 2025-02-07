@@ -40,6 +40,9 @@ fi
 autoload bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
 
+# AZ CLI completion
+source $(brew --prefix)/etc/bash_completion.d/az
+
 # AWS CLI completion
 if [ -f "/opt/homebrew/bin/aws_completer" ]; then
     complete -C '/opt/homebrew/bin/aws_completer' aws
