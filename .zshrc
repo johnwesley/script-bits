@@ -83,3 +83,15 @@ fi
 if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
   . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
 fi
+
+# ------------------------------------------------------------------------
+# Rust bits
+# ------------------------------------------------------------------------
+
+# Add Cargo's bin directory ($HOME/.cargo/bin) to PATH
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# Load Rust environment variables from Cargo if available
+if [ -f "$HOME/.cargo/env" ]; then
+    source "$HOME/.cargo/env"
+fi
