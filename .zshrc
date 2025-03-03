@@ -30,6 +30,7 @@ if [ -f "/opt/homebrew/opt/kube-ps1/share/kube-ps1.sh" ]; then
     source "/opt/homebrew/opt/kube-ps1/share/kube-ps1.sh"
     export KUBE_PS1_SYMBOL_USE_IMG=true
     PS1='$(kube_ps1)'$PS1
+    kubeoff # turn off kube context by default
 fi
 
 # ------------------------------------------------------------------------
