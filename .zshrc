@@ -89,6 +89,14 @@ fi
 # ------------------------------------------------------------------------
 [[ -f "$ZSH_CUSTOM/aliases.zsh" ]] && source "$ZSH_CUSTOM/aliases.zsh"
 
+# Ensure `claude` points to the correct binary
+if alias claude >/dev/null 2>&1; then
+  unalias claude
+fi
+if [[ -x "$HOME/.local/bin/claude" ]]; then
+  alias claude="$HOME/.local/bin/claude"
+fi
+
 # ------------------------------------------------------------------------
 # AWS profile helpers
 # ------------------------------------------------------------------------
